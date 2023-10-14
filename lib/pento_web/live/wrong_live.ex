@@ -1,8 +1,22 @@
 defmodule PentoWeb.WrongLive do
-  use Phoenix.LiveView, layout: {PentoWeb.LayoutView, :live}
+  use PentoWeb, :live_view
 
   def mount(_params, _session, socket) do
     {:ok, assign(socket, score: 0, message: "Make a guess:")}
+  end
+
+  def handle_event("guess", %{"number" => guess} = _data, socket) do
+    message = "Your guess: #{guess}. Wrong. Guess again. "
+    score = socket.assigns.score - 1
+
+    {
+      :noreply,
+      assign(
+        socket,
+        message: message,
+        score: score
+      )
+    }
   end
 
   def render(assigns) do
