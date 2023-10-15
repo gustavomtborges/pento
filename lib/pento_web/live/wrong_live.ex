@@ -14,7 +14,6 @@ defmodule PentoWeb.WrongLive do
 
   def handle_event("guess", %{"number" => guess} = _data, socket) do
     is_right? = check_guess(socket.assigns.number, String.to_integer(guess))
-    dbg(is_right?)
 
     message =
       case(is_right?) do
