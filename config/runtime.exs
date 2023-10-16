@@ -48,19 +48,18 @@ if config_env() == :prod do
       You can generate one by calling: mix phx.gen.secret
       """
 
-  host = System.get_env("PHX_HOST") || "example.com"
+  _host = System.get_env("PHX_HOST") || "example.com"
   port = String.to_integer(System.get_env("PORT") || "4000")
 
   config :pento, :dns_cluster_query, System.get_env("DNS_CLUSTER_QUERY")
 
   config :pento, PentoWeb.Endpoint,
-    url: [host: host, port: 443, scheme: "https"],
     http: [
       # Enable IPv6 and bind on all interfaces.
       # Set it to  {0, 0, 0, 0, 0, 0, 0, 1} for local network only access.
       # See the documentation on https://hexdocs.pm/plug_cowboy/Plug.Cowboy.html
       # for details about using IPv6 vs IPv4 and loopback vs public addresses.
-      ip: {0, 0, 0, 0, 0, 0, 0, 0},
+      ip: {127, 0, 0, 1},
       port: port
     ],
     secret_key_base: secret_key_base
@@ -103,10 +102,12 @@ if config_env() == :prod do
   # Also, you may need to configure the Swoosh API client of your choice if you
   # are not using SMTP. Here is an example of the configuration:
   #
-  #     config :pento, Pento.Mailer,
-  #       adapter: Swoosh.Adapters.Mailgun,
-  #       api_key: System.get_env("MAILGUN_API_KEY"),
-  #       domain: System.get_env("MAILGUN_DOMAIN")
+  config :pento, Pento.Mailer,
+    adapter: Swoosh.Adapters.AmazonSES,
+    region: System.get_env("AWS_REGION"),
+    access_key: System.get_env("SES_ACCESS_KEY"),
+    secret: System.get_env("SES_SECRET_KEY")
+
   #
   # For this example you need include a HTTP client required by Swoosh API client.
   # Swoosh supports Hackney and Finch out of the box:
