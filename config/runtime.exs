@@ -103,10 +103,10 @@ if config_env() == :prod do
   # are not using SMTP. Here is an example of the configuration:
   #
   config :pento, Pento.Mailer,
-    adapter: Swoosh.Adapters.AmazonSES,
-    region: System.get_env("AWS_REGION"),
-    access_key: System.get_env("SES_ACCESS_KEY"),
-    secret: System.get_env("SES_SECRET_KEY")
+    adapter: Swoosh.Adapters.SMTP,
+    relay: "email-smtp.us-east-1.amazonaws.com",
+    username: System.get_env("SES_ACCESS_KEY"),
+    password: System.get_env("SES_SECRET_KEY")
 
   #
   # For this example you need include a HTTP client required by Swoosh API client.
