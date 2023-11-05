@@ -89,6 +89,12 @@ defmodule Pento.Catalog do
     Repo.delete(product)
   end
 
+  def markdown_product(%Product{} = product, attrs \\ %{}) do
+    product
+    |> Product.unit_price_changeset(attrs)
+    |> Repo.update()
+  end
+
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking product changes.
 
